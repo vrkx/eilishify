@@ -3,7 +3,7 @@
         "title": "CHIHIRO",
         "artist": "Billie Eilish",
         "cover": "https://m.media-amazon.com/images/I/51TH1unr6lL._UXNaN_FMjpg_QL85_.jpg",
-        "src": "chi.mp3"
+        "src": "./audio/chi.mp3"
     },
     {
         "title": "Song 2",
