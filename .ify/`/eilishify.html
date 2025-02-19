@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eilish-ify</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: white;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+        }
+        .sidebar h1 {
+            color:#2d4587
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 10px 0;
+            cursor: pointer;
+        }
+        .sidebar ul li:hover {
+            color:#2d4587
+        }
+        .content {
+            
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .content h2 {
+            margin-bottom: 20px;
+        }
+        .song-list {
+            padding-left: 22px;
+            list-style: none;
+            padding: 0;
+        }
+        .song-list li {
+    display: flex
+;
+    align-items: center;
+    padding: 10px;
+    margin-top: 10px;
+    margin-left: 50px;
+    /* border-bottom: 1px solid #333; */
+    cursor: pointer;
+    border-radius: 5px;
+}
+        .song-list li:hover {
+            background-color: #333;
+        }
+        .song-list li img {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+        .song-list li div {
+            flex-grow: 1;
+        }
+        .song-list li div span {
+            display: block;
+        }
+        .song-list li div .title {
+            font-weight: bold;
+        }
+        .song-list li div .artist {
+            color: #999;
+        }
+        .player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #282828;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .player button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>Eilishify</h1>
+        <ul>
+            <li>Billie Eilish</li>
+            
+        </ul>
+    </div>
+    <div class="content">
+        <h2 style="text-align: center;">Eilishify</h2>
+        <p  style="text-align: center;" >Enjoy all Billie Songs :]</p>
+        <ul class="song-list" id="songList"></ul>
+    </div>
+    <div class="player">
+        <button onclick="prevSong()">&#9664;</button>
+        <button onclick="playPause()">&#9654;/&#10074;&#10074;</button>
+        <button onclick="nextSong()">&#9654;&#9654;</button>
+    </div>
+    <audio id="audioPlayer" src=""></audio>
+    <script>
+        let songs = [];
+        let currentSongIndex = 0;
+        const audioPlayer = document.getElementById('audioPlayer');
+        const songList = document.getElementById('songList');
+
+        fetch('songs.json')
+            .then(response => response.json())
+            .then(data => {
+                songs = data;
+                displaySongs();
+            });
+
+        function displaySongs() {
+            songs.forEach((song, index) => {
+                const li = document.createElement('li');
+                const img = document.createElement('img');
+                img.src = song.cover;
+                const div = document.createElement('div');
+                const title = document.createElement('span');
+                title.className = 'title';
+                title.textContent = song.title;
+                const artist = document.createElement('span');
+                artist.className = 'artist';
+                artist.textContent = song.artist;
+                div.appendChild(title);
+                div.appendChild(artist);
+                li.appendChild(img);
+                li.appendChild(div);
+                li.onclick = () => playSong(index);
+                songList.appendChild(li);
+            });
+        }
+
+        function playSong(index) {
+            currentSongIndex = index;
+            audioPlayer.src = songs[currentSongIndex].src;
+            audioPlayer.play();
+        }
+
+        function prevSong() {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+            playSong(currentSongIndex);
+        }
+
+        function playPause() {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+            } else {
+                audioPlayer.pause();
+            }
+        }
+
+        function nextSong() {
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            playSong(currentSongIndex);
+        }
+    </script>
+</body>
+</html>
