@@ -1,6 +1,6 @@
 {
-    "name": "boxify",
-    "short_name": "BoxWPA",
+    "name": "eilishify",
+    "short_name": "eilishify",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#212121",
