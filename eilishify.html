@@ -12,6 +12,11 @@
             background-color: #121212;
             color: white;
         }
+
+        img {
+            border-radius: 3px;
+        }
+
         .sidebar {
             width: 250px;
             height: 100vh;
@@ -29,29 +34,62 @@
             padding: 0;
         }
         .sidebar ul li {
-            padding: 10px 0;
-            cursor: pointer;
-        }
+    background: #202020;
+    padding: 10px 0;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    text-align: center;
+    
+    color: white;
+    margin-top: 20px;
+    border-radius: 5px;
+    text-align: center;
+    width: 245px;
+    transition : background-color 0.5s ease;
+
+    height: 40px;
+
+  
+}
+
+a{
+
+
+    text-decoration: none;
+    color: white;
+
+}
+
         .sidebar ul li:hover {
-            color: #2d4587;
+            background-color : #2f3f3a;
         }
         .content {
-            margin-left: 250px;
+            margin-left: 300px;
+
             padding: 20px;
         }
         .content h2 {
             margin-bottom: 20px;
         }
         .song-list {
-            list-style: none;
-            padding: 0;
-        }
+    margin-left: auto;
+    margin-right: auto;
+    /* align-content: center; */
+    list-style: none;
+    padding: 0;
+}
         .song-list li {
             display: flex;
             align-items: center;
             padding: 10px;
-            border-bottom: 1px solid #333;
+            margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 5px;
             cursor: pointer;
+            
         }
         .song-list li:hover {
             background-color: #333;
@@ -59,6 +97,8 @@
         .song-list li img {
             width: 50px;
             height: 50px;
+            margin-left: 20px;
+            border-radius: 5px;
             margin-right: 20px;
         }
         .song-list li div {
@@ -78,38 +118,97 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background-color: #282828;
+            background-color: #000000;
             padding: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         .player button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
+    background: #2d4587;
+    border-radius: 100px;
+    border: none;
+    color: white;
+    font-size: 20px;
+    width: auto;
+    /* margin-right: 180px; */
+    /* gap: 5px; */
+    cursor: pointer;
+    padding: 10px;
+}
+        .player .song-info {
+            display: flex;
+            align-items: center;
+        }
+        .player .song-info img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        .player .song-info .title {
+            font-weight: bold;
+        }
+        .player .song-info .artist {
+            color: #999;
+        }
+
+        /* Media Queries for Mobile Devices */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .content {
+                margin-left: 0;
+                padding: 10px;
+            }
+            .player {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .player .song-info {
+                margin-bottom: 10px;
+            }
+            .player button {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <h1>Eilishify</h1>
+        <h1 style="  background: linear-gradient(180deg, #6fff5f, #1c3380); /* Gradient colors */
+        -webkit-background-clip: text; /* Clip background to text */
+        -webkit-text-fill-color: transparent; /* Make text transparent */
+        background-clip: text;
+        text-fill-color: transparent;"> <img src="./icon.png" style="width: 25px; height: 25px;" alt=""> Eilishify</h1>
         <ul>
             <li>Billie Eilish</li>
-            <li><a style="color: #2d4587;; text-decoration: none ; font-weight: bold;" href="./Eilishify.mobileconfig">Download App</a></li>
+            <li><a href="./Eilishify.mobileconfig">Download App</a></li>
         </ul>
     </div>
     <div class="content">
         <h2 style="text-align: center;">Eilishify</h2>
-        <p style="text-align: center;">Enjoy all Billie Songs :]</p>
+        <p style="text-align: center;">Listen without ads.</p>
         <ul class="song-list" id="songList"></ul>
     </div>
     <div class="player">
-        <button onclick="prevSong()">&#9664;</button>
-        <button onclick="playPause()">&#9654;/&#10074;&#10074;</button>
-        <button onclick="nextSong()">&#9654;&#9654;</button>
+        <div class="song-info">
+            <img id="cover" src="./icon.png" alt="Cover">
+            <div>
+                <span id="title" class="title">No song playing.</span>
+                <span id="artist" class="artist">.</span>
+            </div>
+        </div>
+        <div style="    
+        position: inherit;
+        left: 740px;
+    ">
+            <button onclick="prevSong()">&#9664;</button>
+            <button onclick="playPause()">&#9654;  /  &#10074;&#10074;</button>
+            <button onclick="nextSong()">&#9654;</button>
+        </div>
     </div>
     <audio id="audioPlayer" src=""></audio>
     <script>
@@ -117,6 +216,9 @@
         let currentSongIndex = 0;
         const audioPlayer = document.getElementById('audioPlayer');
         const songList = document.getElementById('songList');
+        const cover = document.getElementById('cover');
+        const title = document.getElementById('title');
+        const artist = document.getElementById('artist');
 
         fetch('songs.json')
             .then(response => response.json())
@@ -149,6 +251,9 @@
         function playSong(index) {
             currentSongIndex = index;
             audioPlayer.src = songs[currentSongIndex].src;
+            cover.src = songs[currentSongIndex].cover;
+            title.textContent = songs[currentSongIndex].title;
+            artist.textContent = songs[currentSongIndex].artist;
             audioPlayer.play();
         }
 
